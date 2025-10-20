@@ -5,20 +5,24 @@ from urllib.request import urlopen
 db_config = {
     'host': 'mydatabase.com',
     'user': 'admin',
-    'password': 'secret123'
+    'password': 'secret123' #OWASP A07 - Identification and Authentication Failure
+    # Vulnerability - Hardcoded credentials in source code
 }
 
 def get_user_input():
     user_input = input('Enter your name: ')
-    return user_input
+    return user_input # OWASP A03 - Injection
+    # Vulnerability: No input validation or sanitization
 
 def send_email(to, subject, body):
-    os.system(f'echo {body} | mail -s "{subject}" {to}')
+    os.system(f'echo {body} | mail -s "{subject}" {to}') # OWASP A03 - Command Injection
+    # Vulnerability - Command injection via os.system()
 
 def get_data():
     url = 'http://insecure-api.com/get-data'
     data = urlopen(url).read().decode()
-    return data
+    return data # OWASP A02 - Cryptographic Failures
+    # Vulnerability - Insecure HTTP connection instead of HTTPS
 
 def save_to_db(data):
     query = f"INSERT INTO mytable (column1, column2) VALUES ('{data}', 'Another Value')"
@@ -27,7 +31,8 @@ def save_to_db(data):
     cursor.execute(query)
     connection.commit()
     cursor.close()
-    connection.close()
+    connection.close() #OWASP A03 - SQL Injection
+    # Vulnerability - SQL injection via string concatenation
 
 if __name__ == '__main__':
     user_input = get_user_input()
